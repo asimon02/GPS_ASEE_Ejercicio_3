@@ -1,0 +1,225 @@
+openapi: 3.0.0
+info:
+  title: API Contenidos
+  description: Microservicio de Contenidos para gestión de canciones, álbumes, artistas y comentarios.
+  version: "1.0.0"
+servers:
+  - url: http://localhost:5000
+    description: Servidor local de Contenidos
+
+paths:
+  /canciones:
+    get:
+      summary: Listar canciones
+      responses:
+        '200':
+          description: Lista de canciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cancion'
+    post:
+      summary: Subir nueva canción
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancionInput'
+      responses:
+        '201':
+          description: Canción creada
+
+  /canciones/{id_cancion}:
+    get:
+      summary: Obtener detalles de una canción
+      parameters:
+        - in: path
+          name: id_cancion
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detalles de la canción
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cancion'
+    put:
+      summary: Actualizar canción
+      parameters:
+        - in: path
+          name: id_cancion
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancionInput'
+      responses:
+        '200':
+          description: Canción actualizada
+
+  /albumes:
+    get:
+      summary: Listar álbumes
+      responses:
+        '200':
+          description: Lista de álbumes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Album'
+    post:
+      summary: Crear álbum
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlbumInput'
+      responses:
+        '201':
+          description: Álbum creado
+
+  /artistas:
+    get:
+      summary: Listar artistas
+      responses:
+        '200':
+          description: Lista de artistas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Artista'
+
+  /artistas/{id_artista}:
+    get:
+      summary: Obtener detalles de un artista
+      parameters:
+        - in: path
+          name: id_artista
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Datos del artista
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artista'
+
+  /generos:
+    get:
+      summary: Listar géneros
+      responses:
+        '200':
+          description: Lista de géneros
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genero'
+
+  /comentarios:
+    post:
+      summary: Crear comentario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComentarioInput'
+      responses:
+        '201':
+          description: Comentario creado
+
+components:
+  schemas:
+    Cancion:
+      type: object
+      properties:
+        id:
+          type: string
+        titulo:
+          type: string
+        artista:
+          type: string
+        album:
+          type: string
+        genero:
+          type: string
+        url:
+          type: string
+    CancionInput:
+      type: object
+      properties:
+        titulo:
+          type: string
+        artista:
+          type: string
+        album:
+          type: string
+        genero:
+          type: string
+        archivo:
+          type: string
+          description: Ruta o identificador del archivo
+    Album:
+      type: object
+      properties:
+        id:
+          type: string
+        titulo:
+          type: string
+        artista:
+          type: string
+        fecha:
+          type: string
+          format: date
+    AlbumInput:
+      type: object
+      properties:
+        titulo:
+          type: string
+        artista:
+          type: string
+        fecha:
+          type: string
+          format: date
+    Artista:
+      type: object
+      properties:
+        id:
+          type: string
+        nombre:
+          type: string
+        descripcion:
+          type: string
+    Genero:
+      type: object
+      properties:
+        id:
+          type: string
+        nombre:
+          type: string
+    ComentarioInput:
+      type: object
+      properties:
+        usuario:
+          type: string
+        contenido:
+          type: string
+        calificacion:
+          type: integer
